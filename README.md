@@ -2,7 +2,7 @@
 
 Astro Color Scheme is a fully headless dark mode theme toggle for Astro.
 
-[**Live Demo on Stackblitz →**](#)
+[**Live Demo on Stackblitz →**](https://stackblitz.com/edit/github-jpfnv9-ep5z59?file=src%2Fpages%2Findex.astro)
 
 [**Live Demo on Stablo Template →**](https://stablo-astro.web3templates.com/)
 
@@ -24,7 +24,7 @@ import { ThemeSwitch } from "astro-color-scheme";
 ---
 
 <div>
-  <ThemeSwitch>
+  <ThemeSwitch strategy="button">
     <button>Toggle Theme</button>
   </ThemeSwitch>
 </div>
@@ -96,7 +96,31 @@ Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `checkbox` & `<
 
 ## Customizations
 
-As a headless plugin, You are free to add your own styles and icons based on the theme. Here's an example shows usage of Astro Icon.
+As a headless plugin, You are free to add your own styles and icons based on the theme.
+
+Here's an example on how to add custom styles using css variables.
+
+```html
+<style>
+  html {
+    --background-color: white;
+    --text-color: black;
+    color: var(--text-color);
+    background-color: var(--background-color);
+  }
+  .dark {
+    --background-color: black;
+    --text-color: white;
+  }
+  /* OR */
+  [data-theme="dark"] {
+    --background-color: black;
+    --text-color: white;
+  }
+</style>
+```
+
+Here's an example shows usage of Astro Icon.
 
 ```jsx
 ---
@@ -123,7 +147,12 @@ This plugin also supports custom checkbox switch with animations. Just use `stra
 
 ## Tailwind CSS
 
-This plugin should work well with regular CSS as well as Tailwind CSS. You can style the `dark` mode using `dark:` modifier to add custom icon based on the chosen theme.
+This plugin should work well with regular CSS as well as Tailwind CSS. You can style the `dark` mode using `dark:` modifier to add custom icon based on the chosen theme. Make sure you change the `darkMode` to `class` to make this work.
+
+```js
+// tailwind.config.cjs
+ darkMode: "class",
+```
 
 </details>
 
