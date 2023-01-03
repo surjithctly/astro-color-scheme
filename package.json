@@ -1,0 +1,23 @@
+{
+  "name": "astro-color-scheme",
+  "version": "1.0.0",
+  "description": "Perfect dark mode for Astro in few lines of code. Theme Toggle for Dark, Light & Auto (system)",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "homepage": "https://github.com/surjithctly/astro-color-scheme#readme",
+  "bugs": {
+    "url": "https://github.com/surjithctly/astro-color-scheme/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surjithctly/astro-color-scheme.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["astro", "astro-component", "themes", "color-scheme", "dark", "dark-mode", "light", "system", "auto"],
+  "author": "Surjith S M",
+  "license": "MIT"
+}

@@ -1,0 +1,141 @@
+---
+interface Props {
+  strategy?: "button" | "checkbox" | "select";
+  defaultTheme?: "dark" | "light" | "system";
+}
+
+const { strategy, defaultTheme } = Astro.props;
+---
+
+<span id="astro-color-scheme-switch"><slot /></span>
+
+<style>
+  :global(.dark) {
+    color-scheme: dark;
+  }
+</style>
+
+<script define:vars={{ strategy, defaultTheme }}>
+  const themeSwitch = document.getElementById("astro-color-scheme-switch");
+  const theme = localStorage.getItem("theme");
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+
+  function updateTheme(value) {
+    const theme = value === "system" ? systemTheme : value;
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", value);
+  }
+
+  function setupThemeSwitch(selector, eventType, themeUpdater) {
+    const element = themeSwitch.querySelector(selector);
+    if (!element) {
+      throw new Error(
+        `plugin-astro-color-scheme: <${selector}> element must be present inside 'themeSwitch' or change the 'strategy' attribute`
+      );
+    }
+    element.value = theme || defaultTheme || systemTheme;
+
+    if (selector === "input") {
+      console.log(element, defaultTheme, element.value);
+      element.checked = defaultTheme !== element.value;
+    }
+
+    updateTheme(element.value);
+    element.addEventListener(eventType, themeUpdater);
+  }
+
+  switch (strategy) {
+    case "button":
+      setupThemeSwitch("button", "click", (event) => {
+        const button = event.target;
+        const settheme = button.value === "dark" ? "light" : "dark";
+        button.value = settheme;
+        updateTheme(settheme);
+      });
+      break;
+    case "select":
+      setupThemeSwitch("select", "change", (event) => {
+        const select = event.target;
+        updateTheme(select.value);
+      });
+      break;
+    case "checkbox":
+      setupThemeSwitch("input", "change", (event) => {
+        const checkbox = event.target;
+        const settheme = checkbox.value === "dark" ? "light" : "dark";
+        checkbox.value = settheme;
+        updateTheme(settheme);
+      });
+      break;
+    default:
+      updateTheme(theme || defaultTheme || systemTheme);
+  }
+
+  // if (strategy === "button") {
+  //   const button = themeSwitch.querySelector("button");
+
+  //   if (!button) {
+  //     throw new Error(
+  //       "Plugin: astro-color-scheme: A <button> attribute must be present for theme toggle or change the 'strategy' attribute"
+  //     );
+  //   }
+
+  //   if (theme !== null) {
+  //     button.value = theme;
+  //   } else {
+  //     button.value = defaultTheme || systemTheme;
+  //   }
+  //   updateTheme(button.value);
+  //   button.addEventListener("click", () => {
+  //     const settheme = button.value === "dark" ? "light" : "dark";
+  //     button.value = settheme;
+  //     updateTheme(settheme);
+  //   });
+  // } else if (strategy === "select") {
+  //   const select = themeSwitch.querySelector("select");
+
+  //   if (!select) {
+  //     throw new Error(
+  //       "Plugin: astro-color-scheme: A <select> attribute must be present for theme toggle or change the 'strategy' attribute"
+  //     );
+  //   }
+
+  //   if (theme !== null) {
+  //     select.value = theme;
+  //   } else {
+  //     select.value = defaultTheme || systemTheme;
+  //   }
+  //   updateTheme(select.value);
+
+  //   select.addEventListener("change", (event) => {
+  //     const select = event.target;
+  //     updateTheme(select.value);
+  //   });
+  // } else if (strategy === "checkbox") {
+  //   const checkbox = themeSwitch.querySelector("input");
+
+  //   if (!checkbox) {
+  //     throw new Error(
+  //       "Plugin: astro-color-scheme: An <input> must be present for theme toggle or change the 'strategy' attribute"
+  //     );
+  //   }
+
+  //   if (theme !== null) {
+  //     checkbox.value = theme;
+  //   } else {
+  //     checkbox.value = defaultTheme || systemTheme;
+  //   }
+  //   updateTheme(checkbox.value);
+  //   checkbox.checked = defaultTheme !== checkbox.value;
+
+  //   checkbox.addEventListener("change", () => {
+  //     const settheme = checkbox.value === "dark" ? "light" : "dark";
+  //     checkbox.value = settheme;
+  //     updateTheme(settheme);
+  //   });
+  // }
+</script>
