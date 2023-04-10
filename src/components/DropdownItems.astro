@@ -1,9 +1,0 @@
----
-interface Props {
-    class?: string;
-}
-const { class: className } = Astro.props;
----
-
-
-<div class:list={["dropdown-toggle hidden", className]}><slot/></div>
