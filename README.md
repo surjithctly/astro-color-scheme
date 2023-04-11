@@ -59,7 +59,7 @@ import { ThemeSwitch } from "astro-color-scheme";
 ---
 
 <div>
-  <ThemeSwitch strategy="radio" defaultTheme="system">
+  <ThemeSwitch strategy="radio" defaultTheme="system" Element="div">
     <form>
       <label><input type="radio" name="theme" value="system" />System</label>
       <label><input type="radio" name="theme" value="dark" />Dark</label>
@@ -94,8 +94,9 @@ Options for `ThemeSwitch`
 | -------------- | ---------------------------- | --------------------------------------------------------------- |
 | `strategy`     | `required` if you use toggle | Possible values: `button`, `checkbox`, `select` or `radio`      |
 | `defaultTheme` | `optional`                   | Default: `system`, Possible values: `light`, `dark` or `system` |
+| `Element`      | `optional`                   | Default: `span`, Possible values: `div`, `span`                 |
 
-Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `<input type=checkbox>`, `<select>`, `<form>`.
+The Element option lets you select what wrapper element to use for the ThemeSwitch. Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `<input type=checkbox>`, `<select>`, `<form>`.
 
 ```html
 <!-- Button -->

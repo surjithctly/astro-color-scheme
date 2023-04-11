@@ -1,13 +1,16 @@
 ---
 interface Props {
-  strategy?: "button" | "checkbox" | "select" | 'radio';
+  strategy?: "button" | "checkbox" | "select" | "radio";
   defaultTheme?: "dark" | "light" | "system";
+  element?: "div" | "span";
 }
 
-const { strategy, defaultTheme } = Astro.props;
+const { strategy, defaultTheme, Element = "span" } = Astro.props;
 ---
 
-<span id="astro-color-scheme-switch"><slot /></span>
+<Element id="astro-color-scheme-switch">
+  <slot />
+</Element>
 
 <style>
   :global(.dark) {
