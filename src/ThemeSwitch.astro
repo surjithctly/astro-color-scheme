@@ -52,7 +52,6 @@ const { strategy, defaultTheme } = Astro.props;
     element.value = theme || defaultTheme || systemTheme;
 
     if (selector === "input") {
-      console.log(element, defaultTheme, element.value);
       element.checked = defaultTheme !== element.value;
     }
 
