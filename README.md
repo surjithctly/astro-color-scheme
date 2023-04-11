@@ -94,9 +94,9 @@ Options for `ThemeSwitch`
 | -------------- | ---------------------------- | --------------------------------------------------------------- |
 | `strategy`     | `required` if you use toggle | Possible values: `button`, `checkbox`, `select` or `radio`      |
 | `defaultTheme` | `optional`                   | Default: `system`, Possible values: `light`, `dark` or `system` |
-| `Element`      | `optional`                   | Default: `span`, Possible values: `div`, `span`                 |
+| `as`           | `optional`                   | Default: `span`, Possible values: `div`, `span`                 |
 
-The Element option lets you select what wrapper element to use for the ThemeSwitch. Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `<input type=checkbox>`, `<select>`, `<form>`.
+The `as` option lets you select what wrapper element to use for the ThemeSwitch. Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `<input type=checkbox>`, `<select>`, `<form>`.
 
 ```html
 <!-- Button -->
