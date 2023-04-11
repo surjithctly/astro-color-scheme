@@ -2,7 +2,7 @@
 interface Props {
   strategy?: "button" | "checkbox" | "select" | "radio";
   defaultTheme?: "dark" | "light" | "system";
-  element?: "div" | "span";
+  as?: "div" | "span";
 }
 
 const { strategy, defaultTheme, as: Element = "span"  } = Astro.props;
