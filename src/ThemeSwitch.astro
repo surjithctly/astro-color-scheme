@@ -18,15 +18,27 @@ const { strategy, defaultTheme } = Astro.props;
 <script define:vars={{ strategy, defaultTheme }}>
   const themeSwitch = document.getElementById("astro-color-scheme-switch");
   const theme = localStorage.getItem("theme");
-  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+  const themeMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  let systemTheme = themeMatcher.matches
     ? "dark"
     : "light";
 
-  function updateTheme(value) {
-    const theme = value === "system" ? systemTheme : value;
+  themeMatcher.addEventListener("change", (event) => {
+    const theme = event.matches ? "dark" : "light";
+    systemTheme = theme;
+    if (localStorage.getItem("theme") === "system") {
+      updateAppliedTheme(theme);
+    }
+  });
+
+  function updateAppliedTheme(value) {
     document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.classList.add(value);
+    document.documentElement.setAttribute("data-theme", value); 
+  }
+
+  function updateTheme(value) {
+    updateAppliedTheme(value === "system" ? systemTheme : value)
     localStorage.setItem("theme", value);
   }
 
@@ -40,7 +52,6 @@ const { strategy, defaultTheme } = Astro.props;
     element.value = theme || defaultTheme || systemTheme;
 
     if (selector === "input") {
-      console.log(element, defaultTheme, element.value);
       element.checked = defaultTheme !== element.value;
     }
 
