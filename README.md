@@ -16,7 +16,7 @@ pnpm add astro-color-scheme
 
 ## Basic Usage
 
-You can toggle the theme using `button`, `select` or `checkbox` inside the `<ThemeSwitch>`.
+You can toggle the theme using `button`, `select`, `checkbox` or `radio` inside the `<ThemeSwitch>`.
 
 ```jsx
 ---
@@ -31,7 +31,7 @@ import { ThemeSwitch } from "astro-color-scheme";
 ```
 
 <details>
-<summary>Advanced Example</summary>
+<summary>Advanced Examples</summary>
 
 **Using Select:**
 
@@ -47,6 +47,24 @@ import { ThemeSwitch } from "astro-color-scheme";
       <option value="dark">Dark</option>
       <option value="light">Light</option>
     </select>
+  </ThemeSwitch>
+</div>
+```
+
+**Using Radio:**
+
+```jsx
+---
+import { ThemeSwitch } from "astro-color-scheme";
+---
+
+<div>
+  <ThemeSwitch strategy="radio" defaultTheme="system" as="div">
+    <form>
+      <label><input type="radio" name="theme" value="system" />System</label>
+      <label><input type="radio" name="theme" value="dark" />Dark</label>
+      <label><input type="radio" name="theme" value="light" />Light</label>
+    </form>
   </ThemeSwitch>
 </div>
 ```
@@ -74,10 +92,11 @@ Options for `ThemeSwitch`
 
 | option         | required                     | notes                                                           |
 | -------------- | ---------------------------- | --------------------------------------------------------------- |
-| `strategy`     | `required` if you use toggle | Possible values: `button`, `checkbox` or `select`               |
+| `strategy`     | `required` if you use toggle | Possible values: `button`, `checkbox`, `select` or `radio`      |
 | `defaultTheme` | `optional`                   | Default: `system`, Possible values: `light`, `dark` or `system` |
+| `as`           | `optional`                   | Default: `span`, Possible values: `div`, `span`                 |
 
-Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `checkbox` & `<select>`
+The `as` option lets you select what wrapper element to use for the ThemeSwitch. Elements Allowed for Toggle inside `ThemeSwitch` are `<button>`, `<input type=checkbox>`, `<select>`, `<form>`.
 
 ```html
 <!-- Button -->

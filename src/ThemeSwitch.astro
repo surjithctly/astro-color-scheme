@@ -1,13 +1,16 @@
 ---
 interface Props {
-  strategy?: "button" | "checkbox" | "select";
+  strategy?: "button" | "checkbox" | "select" | "radio";
   defaultTheme?: "dark" | "light" | "system";
+  as?: "div" | "span";
 }
 
-const { strategy, defaultTheme } = Astro.props;
+const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
 ---
 
-<span id="astro-color-scheme-switch"><slot /></span>
+<Element id="astro-color-scheme-switch">
+  <slot />
+</Element>
 
 <style>
   :global(.dark) {
@@ -19,9 +22,7 @@ const { strategy, defaultTheme } = Astro.props;
   const themeSwitch = document.getElementById("astro-color-scheme-switch");
   const theme = localStorage.getItem("theme");
   const themeMatcher = window.matchMedia("(prefers-color-scheme: dark)");
-  let systemTheme = themeMatcher.matches
-    ? "dark"
-    : "light";
+  let systemTheme = themeMatcher.matches ? "dark" : "light";
 
   themeMatcher.addEventListener("change", (event) => {
     const theme = event.matches ? "dark" : "light";
@@ -34,11 +35,12 @@ const { strategy, defaultTheme } = Astro.props;
   function updateAppliedTheme(value) {
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(value);
-    document.documentElement.setAttribute("data-theme", value); 
+    document.documentElement.setAttribute("data-theme", value);
   }
 
   function updateTheme(value) {
-    updateAppliedTheme(value === "system" ? systemTheme : value)
+    const theme = value === "system" ? systemTheme : value;
+    updateAppliedTheme(theme);
     localStorage.setItem("theme", value);
   }
 
@@ -49,7 +51,15 @@ const { strategy, defaultTheme } = Astro.props;
         `plugin-astro-color-scheme: <${selector}> element must be present inside 'themeSwitch' or change the 'strategy' attribute`
       );
     }
-    element.value = theme || defaultTheme || systemTheme;
+
+    if (selector === "form") {
+      element.value = theme || defaultTheme || systemTheme;
+      Array.from(element.querySelectorAll("input")).forEach((input) => {
+        input.checked = (theme || defaultTheme || systemTheme) === input.value;
+      });
+    } else {
+      element.value = theme || defaultTheme || systemTheme;
+    }
 
     if (selector === "input") {
       element.checked = defaultTheme !== element.value;
@@ -80,6 +90,11 @@ const { strategy, defaultTheme } = Astro.props;
         const settheme = checkbox.value === "dark" ? "light" : "dark";
         checkbox.value = settheme;
         updateTheme(settheme);
+      });
+      break;
+    case "radio":
+      setupThemeSwitch("form", "click", (event) => {
+        updateTheme(event.target.value);
       });
       break;
     default:
