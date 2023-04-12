@@ -59,7 +59,7 @@ import { ThemeSwitch } from "astro-color-scheme";
 ---
 
 <div>
-  <ThemeSwitch strategy="radio" defaultTheme="system" Element="div">
+  <ThemeSwitch strategy="radio" defaultTheme="system" as="div">
     <form>
       <label><input type="radio" name="theme" value="system" />System</label>
       <label><input type="radio" name="theme" value="dark" />Dark</label>
