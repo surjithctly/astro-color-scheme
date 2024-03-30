@@ -72,7 +72,7 @@ const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
   switch (strategy) {
     case "button":
       setupThemeSwitch("button", "click", (event) => {
-        const button = event.target;
+        const button = event.currentTarget;
         const settheme = button.value === "dark" ? "light" : "dark";
         button.value = settheme;
         updateTheme(settheme);
@@ -80,13 +80,13 @@ const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
       break;
     case "select":
       setupThemeSwitch("select", "change", (event) => {
-        const select = event.target;
+        const select = event.currentTarget;
         updateTheme(select.value);
       });
       break;
     case "checkbox":
       setupThemeSwitch("input", "change", (event) => {
-        const checkbox = event.target;
+        const checkbox = event.currentTarget;
         const settheme = checkbox.value === "dark" ? "light" : "dark";
         checkbox.value = settheme;
         updateTheme(settheme);
@@ -94,7 +94,7 @@ const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
       break;
     case "radio":
       setupThemeSwitch("form", "click", (event) => {
-        updateTheme(event.target.value);
+        updateTheme(event.currentTarget.value);
       });
       break;
     default:
