@@ -1,11 +1,11 @@
 ---
-interface Props {
-  strategy?: "button" | "checkbox" | "select" | "radio";
-  defaultTheme?: "dark" | "light" | "system";
-  as?: "div" | "span";
-}
+type Props = Partial<{
+  as: "div" | "span";
+  defaultTheme: "dark" | "light" | "system";
+  strategy: "button" | "checkbox" | "select" | "radio";
+}>;
 
-const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
+const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
 ---
 
 <Element id="astro-color-scheme-switch">
