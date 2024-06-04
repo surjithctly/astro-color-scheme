@@ -1,9 +1,9 @@
 ---
-type Props = Partial<{
-  as: "div" | "span";
-  defaultTheme: "dark" | "light" | "system";
+type Props = {
   strategy: "button" | "checkbox" | "select" | "radio";
-}>;
+  as?: "div" | "span";
+  defaultTheme?: "dark" | "light" | "system";
+};
 
 const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
 ---
@@ -68,6 +68,12 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
     updateTheme(element.value);
     element.addEventListener(eventType, themeUpdater);
   }
+
+  if (!strategy) {
+      throw new Error(
+        `plugin-astro-color-scheme: Please add a 'strategy' attribute to <ThemeSwitch/>`
+      );
+    }
 
   switch (strategy) {
     case "button":
