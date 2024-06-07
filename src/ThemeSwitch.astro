@@ -5,10 +5,21 @@ type Props = {
   defaultTheme?: "dark" | "light" | "system";
 };
 
+
 const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
+
+function uuidv4() {
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+const dataIdPrefix = "astro-color-scheme-switch";
+const dataId = `${dataIdPrefix}__${uuidv4()}`;
+
 ---
 
-<Element id="astro-color-scheme-switch">
+<Element data-id={dataId} data-strategy={strategy}>
   <slot />
 </Element>
 
@@ -18,8 +29,8 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
   }
 </style>
 
-<script define:vars={{ strategy, defaultTheme }}>
-  const themeSwitch = document.getElementById("astro-color-scheme-switch");
+<script define:vars={{ strategy, defaultTheme, dataId, dataIdPrefix }}>
+  const themeSwitch = document.querySelector(`[data-id="${dataId}"]`);
   const theme = localStorage.getItem("theme");
   const themeMatcher = window.matchMedia("(prefers-color-scheme: dark)");
   let systemTheme = themeMatcher.matches ? "dark" : "light";
@@ -69,11 +80,40 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
     element.addEventListener(eventType, themeUpdater);
   }
 
+
+  function updateAllThemeSwitchers(value) {
+    const themeSwitchers = document.querySelectorAll(`[data-id^="${dataIdPrefix}"]`);
+    if (!(themeSwitchers.length > 1)) return;
+
+    themeSwitchers.forEach((themeSwitcher) => {
+      const strategy = themeSwitcher.getAttribute("data-strategy");
+      switch(strategy) {
+        case "button":
+          const button = themeSwitcher.querySelector("button");
+          (button.value !== value) && (button.value = value);
+          break;
+        case "select":
+          const select = themeSwitcher.querySelector("select");
+          (select.value !== value) && (select.value = value);
+          break;
+        case "checkbox":
+          const checkbox = themeSwitcher.querySelector("input");
+          (checkbox.value !== value) && (checkbox.value = value, checkbox.checked = !checkbox.checked);
+          break;
+        case "radio":
+          const radio = themeSwitcher.querySelectorAll("radio").find((radio) => radio.value === value)
+          !radio.chenked && (radio.checked = true);
+          break;
+      }
+    });
+  }
+
   if (!strategy) {
       throw new Error(
         `plugin-astro-color-scheme: Please add a 'strategy' attribute to <ThemeSwitch/>`
       );
     }
+
 
   switch (strategy) {
     case "button":
@@ -82,12 +122,14 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
         const settheme = button.value === "dark" ? "light" : "dark";
         button.value = settheme;
         updateTheme(settheme);
+        updateAllThemeSwitchers(settheme)
       });
       break;
     case "select":
       setupThemeSwitch("select", "change", (event) => {
         const select = event.currentTarget;
         updateTheme(select.value);
+        updateAllThemeSwitchers(select.value)
       });
       break;
     case "checkbox":
@@ -96,14 +138,18 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
         const settheme = checkbox.value === "dark" ? "light" : "dark";
         checkbox.value = settheme;
         updateTheme(settheme);
+        updateAllThemeSwitchers(settheme)
       });
       break;
     case "radio":
       setupThemeSwitch("form", "click", (event) => {
         updateTheme(event.currentTarget.value);
+        updateAllThemeSwitchers(event.currentTarget.value)
+
       });
       break;
     default:
       updateTheme(theme || defaultTheme || systemTheme);
+      updateAllThemeSwitchers(theme || defaultTheme || systemTheme)
   }
 </script>
