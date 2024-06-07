@@ -148,7 +148,7 @@ import { ThemeSwitch } from "astro-color-scheme";
 ---
 
 <div>
-  <ThemeSwitch>
+  <ThemeSwitch strategy="button">
     <button>
       <span class="sr-only">Toggle Theme</span>
       <Icon class="dark:hidden" name="heroicons-outline:sun" />

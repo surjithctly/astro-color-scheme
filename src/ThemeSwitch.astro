@@ -1,11 +1,12 @@
 ---
-interface Props {
-  strategy?: "button" | "checkbox" | "select" | "radio";
-  defaultTheme?: "dark" | "light" | "system";
+type Props = {
+  strategy: "button" | "checkbox" | "select" | "radio";
   as?: "div" | "span";
-}
+  defaultTheme?: "dark" | "light" | "system";
+};
 
-const { strategy, defaultTheme, as: Element = "span" } = Astro.props;
+
+const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
 
 function uuidv4() {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
@@ -15,6 +16,7 @@ function uuidv4() {
 
 const dataIdPrefix = "astro-color-scheme-switch";
 const dataId = `${dataIdPrefix}__${uuidv4()}`;
+
 ---
 
 <Element data-id={dataId} data-strategy={strategy}>
@@ -78,6 +80,7 @@ const dataId = `${dataIdPrefix}__${uuidv4()}`;
     element.addEventListener(eventType, themeUpdater);
   }
 
+
   function updateAllThemeSwitchers(value) {
     const themeSwitchers = document.querySelectorAll(`[data-id^="${dataIdPrefix}"]`);
     if (!(themeSwitchers.length > 1)) return;
@@ -105,10 +108,17 @@ const dataId = `${dataIdPrefix}__${uuidv4()}`;
     });
   }
 
+  if (!strategy) {
+      throw new Error(
+        `plugin-astro-color-scheme: Please add a 'strategy' attribute to <ThemeSwitch/>`
+      );
+    }
+
+
   switch (strategy) {
     case "button":
       setupThemeSwitch("button", "click", (event) => {
-        const button = event.target;
+        const button = event.currentTarget;
         const settheme = button.value === "dark" ? "light" : "dark";
         button.value = settheme;
         updateTheme(settheme);
@@ -117,14 +127,14 @@ const dataId = `${dataIdPrefix}__${uuidv4()}`;
       break;
     case "select":
       setupThemeSwitch("select", "change", (event) => {
-        const select = event.target;
+        const select = event.currentTarget;
         updateTheme(select.value);
         updateAllThemeSwitchers(select.value)
       });
       break;
     case "checkbox":
       setupThemeSwitch("input", "change", (event) => {
-        const checkbox = event.target;
+        const checkbox = event.currentTarget;
         const settheme = checkbox.value === "dark" ? "light" : "dark";
         checkbox.value = settheme;
         updateTheme(settheme);
@@ -133,8 +143,9 @@ const dataId = `${dataIdPrefix}__${uuidv4()}`;
       break;
     case "radio":
       setupThemeSwitch("form", "click", (event) => {
-        updateTheme(event.target.value);
-        updateAllThemeSwitchers(event.target.value)
+        updateTheme(event.currentTarget.value);
+        updateAllThemeSwitchers(event.currentTarget.value)
+
       });
       break;
     default:
