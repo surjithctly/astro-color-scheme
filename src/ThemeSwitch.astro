@@ -19,10 +19,8 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
 </style>
 
 <script define:vars={{ strategy, defaultTheme }}>
-let doc = document;
-
 function task() {
-  const themeSwitch = doc.getElementById("astro-color-scheme-switch");
+  const themeSwitch = document.getElementById("astro-color-scheme-switch");
   const theme = localStorage.getItem("theme");
   const themeMatcher = window.matchMedia("(prefers-color-scheme: dark)");
   let systemTheme = themeMatcher.matches ? "dark" : "light";
@@ -36,9 +34,9 @@ function task() {
   });
 
   function updateAppliedTheme(value) {
-    doc.documentElement.classList.remove("light", "dark");
-    doc.documentElement.classList.add(value);
-    doc.documentElement.setAttribute("data-theme", value);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(value);
+    document.documentElement.setAttribute("data-theme", value);
   }
 
   function updateTheme(value) {
@@ -113,12 +111,7 @@ function task() {
 
 task();
 
-document.addEventListener('astro:before-swap', (event) => {
-  doc = event.newDocument;
+document.addEventListener('astro:after-swap', () => {
   task();
-
-  event.viewTransition.updateCallbackDone.then(() => {
-    doc = document;
-  });
 });
 </script>
