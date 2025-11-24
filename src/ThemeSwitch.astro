@@ -19,6 +19,7 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
 </style>
 
 <script define:vars={{ strategy, defaultTheme }}>
+function task() {
   const themeSwitch = document.getElementById("astro-color-scheme-switch");
   const theme = localStorage.getItem("theme");
   const themeMatcher = window.matchMedia("(prefers-color-scheme: dark)");
@@ -106,4 +107,11 @@ const { strategy, defaultTheme, as: Element = "span" }: Props = Astro.props;
     default:
       updateTheme(theme || defaultTheme || systemTheme);
   }
+}
+
+task();
+
+document.addEventListener('astro:after-swap', () => {
+  task();
+});
 </script>
